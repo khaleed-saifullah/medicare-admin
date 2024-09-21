@@ -1,0 +1,135 @@
+<%- include('partial/header'); -%>
+	<!-- Sidebar  -->
+	<div
+		class="z-[100] bg-base-100 xl:bg-transparent flex duration-150 flex-col items-center w-full translate-x-[-100%] xl:translate-x-0 absolute xl:relative min-h-screen py-5 xl:w-1/5 gap-y-10"
+		id="sidebar">
+		<div class="relative flex justify-center w-full">
+			<a href="/admin">
+				<img src="/img/logo.png" alt="" class="h-28 w-fit" />
+			</a>
+			<button class="absolute top-0 right-[5%] btn btn-outline btn-primary xl:hidden" onclick="sidebarToggle()">
+				<i class="text-xl bi bi-x"></i>
+			</button>
+		</div>
+
+		<div class="flex flex-col gap-y-4">
+			<a href="/admin/doctor-list" class="sidebar-link active-sidebar-link">
+				<i class="bi bi-clipboard-pulse"></i>
+				Doctors</a>
+			<a href="/admin/hospital-list" class="sidebar-link">
+				<i class="bi bi-hospital"></i>
+				Hospitals</a>
+			<a href="/admin/sector-list" class="sidebar-link">
+				<i class="bi bi-gear-wide-connected"></i>
+				Sectors</a>
+			<a href="/admin/log-out" class="mt-5 sidebar-link">
+				<i class="text-xl bi bi-box-arrow-right"></i>
+				Log Out</a>
+		</div>
+	</div>
+	<div class="flex flex-col w-full px-5 py-5 overflow-y-auto xl:px-0 xl:w-4/5">
+		<div class="flex justify-between">
+			<h2 class="text-3xl font-bold text-black">Add Doctor</h2>
+			<button class="btn btn-outline btn-accent xl:hidden" onclick="sidebarToggle()">
+				<i class="text-xl bi bi-list"></i>
+			</button>
+		</div>
+		<form action="/admin/add-doctor" method="POST" enctype="multipart/form-data">
+			<div class="grid lg:grid-cols-2 gap-x-28 gap-y-10 mt-10 mb-5 xl:mb-0 bg-base-100 p-10">
+				<div class="flex flex-col gap-y-5">
+					<h3 class="text-2xl font-bold">Add Doctor Info</h3>
+
+					<!-- Name input -->
+					<div class="flex flex-col form-control gap-y-1">
+						<label for="name" class="label">Name</label>
+						<input type="text" name="name" class="input input-bordered" placeholder="Name" required />
+					</div>
+
+					<!--Image inoput -->
+					<div class="flex flex-col form-control gap-y-2">
+						<label for="name" class="label">Image</label>
+						<img src="/img/250_250.png" class="self-center w-64 mt-4 h-fit" alt="" id="doctor-image"
+							class="doctor-image" />
+						<input type="file" class="file-input file-input-bordered file-input-accent" id="doctor-image-input"
+							name="doctor_image" onchange="previewFile(this.id)" required />
+					</div>
+
+					<!-- Degree -->
+					<div class="flex flex-col form-control gap-y-1">
+						<label for="name" class="label">Degree</label>
+						<input type="text" name="degree" class="input input-bordered" placeholder="Degree" required />
+					</div>
+					<div class="flex flex-col form-control gap-y-1">
+						<label for="name" class="label">Designation</label>
+						<input type="text" name="designation" class="input input-bordered" placeholder="Designation" required />
+					</div>
+					<!-- Location -->
+					<div class="flex flex-col form-control gap-y-1">
+						<label for="name" class="label">Location</label>
+						<div class="grid grid-cols-3 gap-x-4">
+							<select class="select select-bordered" id="divisionOne" name="division_id" required>
+								<option disabled selected>Select Division</option>
+								<% for(let i=0; i <divisions.length; i++) { %>
+									<option value="<%= divisions[i].id %>">
+										<%= divisions[i].division_name %>
+									</option>
+									<% } %>
+							</select>
+							<select class="select select-bordered" id="districtOne" name="district_id" required>
+								<option disabled selected>Select District</option>
+							</select>
+							<select class="select select-bordered" id="thanaOne" name="thana_id" required>
+								<option disabled selected>Select Thana</option>
+							</select>
+						</div>
+					</div>
+
+					<!-- Info -->
+					<div class="flex flex-col form-control gap-y-1">
+						<label for="name" class="label">Info</label>
+						<textarea class="textarea textarea-bordered" placeholder="Bio" name="info" required></textarea>
+					</div>
+
+					<!-- Category -->
+					<div class="flex flex-col form-control gap-y-1">
+						<label for="name" class="label">Category</label>
+						<select class="select select-bordered" name="sector" required>
+							<option disabled selected>Select Category</option>
+							<% for(let j=0;j<sector.length;j++){ %>
+								<option value="<%= sector[j].id %>">
+									<%= sector[j].sector_name_bng %>
+								</option>
+								<% } %>
+						</select>
+					</div>
+					<button class="btn btn-primary text-white mt-10" type="submit">
+						Submit
+					</button>
+				</div>
+				<div class="flex flex-col gap-y-5">
+
+					<h3 class="text-2xl font-bold">Add Doctor Extra Info</h3>
+
+
+					<div class="flex flex-col mt-5 form-control">
+						<label for="name" class="label">Hospital & Time</label>
+						<% for(let w=0;w<hospital.length;w++) { %>
+							<label class="cursor-pointer label flex flex-col mb-3">
+								<span class="label-text mb-3">
+									<%= hospital[w].hospital_name %>
+								</span>
+								<div class="flex items-center gap-x-5">
+									<input type="checkbox" class="checkbox hospital-input" name="hospital_id"
+										value="<%= hospital[w].hospital_id %>" />
+									<input type="text" disabled class="input input-bordered" name="time" placeholder="time" />
+									<input type="text" disabled class="input input-bordered" name="date" placeholder="date" />
+								</div>
+							</label>
+							<% } %>
+					</div>
+
+				</div>
+			</div>
+		</form>
+	</div>
+	<%- include('partial/footer'); -%>

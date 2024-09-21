@@ -1,0 +1,176 @@
+<%- include('partial/header'); -%>
+  <!-- Sidebar  -->
+  <div
+    class="z-[100] bg-base-100 xl:bg-transparent flex duration-150 flex-col items-center w-full translate-x-[-100%] xl:translate-x-0 absolute xl:relative min-h-screen py-5 xl:w-1/5 gap-y-10"
+    id="sidebar">
+    <div class="relative flex justify-center w-full">
+      <a href="/admin">
+        <img src="/img/logo.png" alt="" class="h-28 w-fit" />
+      </a>
+      <button class="absolute top-0 right-[5%] btn btn-outline btn-primary xl:hidden" onclick="sidebarToggle()">
+        <i class="text-xl bi bi-x"></i>
+      </button>
+    </div>
+    <div class="flex flex-col gap-y-4">
+      <a href="/admin/doctor-list" class="sidebar-link">
+        <i class="bi bi-clipboard-pulse"></i>
+        Doctors</a>
+      <a href="/admin/hospital-list" class="sidebar-link">
+        <i class="bi bi-hospital"></i>
+        Hospitals</a>
+      <a href="/admin/sector-list" class="sidebar-link  active-sidebar-link">
+        <i class="bi bi-gear-wide-connected"></i>
+        Sectors</a>
+      <a href="/admin/log-out" class="mt-5 sidebar-link">
+        <i class="text-xl bi bi-box-arrow-right"></i>
+        Log Out</a>
+    </div>
+  </div>
+
+  <!-- Main body section -->
+  <div class="flex flex-col w-full px-5 py-5 overflow-y-auto xl:px-0 xl:w-4/5">
+    <div class="flex justify-between">
+      <h2 class="text-3xl font-bold text-black">Sectors</h2>
+      <button class="btn btn-outline btn-accent xl:hidden" onclick="sidebarToggle()">
+        <i class="text-xl bi bi-list"></i>
+      </button>
+    </div>
+    <div class="flex flex-col px-5 py-3 mt-10">
+      <div class="flex flex-col pb-3 overflow-x-auto bg-base-100">
+        <div class="flex justify-between w-full px-10 my-4">
+          <div class=""></div>
+          <button class="text-white normal-case btn btn-primary" onclick="addSector.showModal()">
+            Add Sector
+          </button>
+          <dialog id="addSector" class="modal">
+            <div class="flex flex-col modal-box gap-y-4">
+              <form action="/admin/add-sector" method="POST" enctype="multipart/form-data">
+                <h3 class="text-lg font-bold">Add Sector</h3>
+                <div class="flex flex-col form-control gap-y-3">
+                  <label for="name" class="label">Image</label>
+                  <img src="https://placehold.co/40x40" class="self-center mt-4" alt="" id="sector-icon-image" />
+                  <input type="file" class="file-input file-input-bordered file-input-accent"
+                    id="sector-icon-image-input" name="sector_icon" onchange="previewFile(this.id)" required />
+                </div>
+                <div class="flex flex-col form-control gap-y-1">
+                  <label for="name" class="label">Sector Name Bangla</label>
+                  <input type="text" name="bng_name" class="input input-bordered" placeholder="Enter sector name"
+                    required />
+                </div>
+                <div class="flex flex-col form-control gap-y-1">
+                  <label for="name" class="label">Sector Name English</label>
+                  <input type="text" name="eng_name" class="input input-bordered" placeholder="Enter sector name"
+                    required />
+                </div>
+
+                <div class="flex justify-end">
+                  <button class="mt-5 text-white btn btn-accent">Submit</button>
+                </div>
+              </form>
+              <form method="dialog" class="modal-backdrop">
+                <button class="mt-5 text-white btn btn-primary">
+                  Close
+                </button>
+              </form>
+            </div>
+            <form method="dialog" class="modal-backdrop">
+              <button>close</button>
+            </form>
+          </dialog>
+        </div>
+        <!-- Table -->
+        <div class="" id="tabContentContainer">
+          <table class="table duration-150">
+            <!-- head -->
+            <thead>
+              <tr>
+                <th>Sector Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(let i=0; i <sector.length; i++) { %>
+                <tr class="py-3">
+                  <td>
+                    <div class="flex items-center space-x-3 xl:flex-row">
+                      <div class="avatar">
+                        <div class="w-12 h-12 mask mask-squircle">
+                          <img src="<%= sector[i].sector_icon %>" alt="Avatar Tailwind CSS Component" />
+                        </div>
+                      </div>
+                      <div>
+                        <div class="font-bold">
+                          <%= sector[i].sector_name_bng %>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <th>
+                    <button class="btn btn-outline btn-sm me-3" onclick="editSector<%= sector[i].id %>.showModal()">
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <dialog id="editSector<%= sector[i].id %>" class="modal">
+                      <div class="flex flex-col modal-box gap-y-4">
+                        <form action="/admin/edit-sector/<%= sector[i].id %>" method="POST"
+                          enctype="multipart/form-data">
+                          <h3 class="text-lg font-bold">Add Sector</h3>
+                          <div class="flex flex-col form-control gap-y-3">
+                            <label for="name" class="label">Image</label>
+                            <img src="<%= sector[i].sector_icon %>" class="self-center mt-4" alt=""
+                              id="sector-icon-image<%= sector[i].id %>" />
+                            <input type="file" class="file-input file-input-bordered file-input-accent"
+                              id="sector-icon-image-input<%= sector[i].id %>" name="sector_icon"
+                              onchange="previewFile(this.id)" />
+                          </div>
+                          <div class="flex flex-col form-control gap-y-1">
+                            <label for="name" class="label">Sector Name Bangla</label>
+                            <input type="text" name="bng_name" value="<%= sector[i].sector_name_bng %>"
+                              class="input input-bordered" placeholder="Enter sector name" />
+                          </div>
+                          <div class="flex flex-col form-control gap-y-1">
+                            <label for="name" class="label">Sector Name English</label>
+                            <input type="text" name="eng_name" value="<%= sector[i].sector_name_eng %>"
+                              class="input input-bordered" placeholder="Enter sector name" />
+                          </div>
+
+                          <div class="flex justify-end">
+                            <button class="mt-5 text-white btn btn-accent">Update</button>
+                          </div>
+                        </form>
+                        <form method="dialog" class="modal-backdrop">
+                          <button class="mt-5 text-white btn btn-primary">
+                            Close
+                          </button>
+                        </form>
+                      </div>
+                      <form method="dialog" class="modal-backdrop">
+                        <button>close</button>
+                      </form>
+                    </dialog>
+                    <a href="#" class="btn btn-sm btn-outline btn-error hover:text-white"
+                      onclick="deleteSector<%= sector[i].id %>.showModal()">
+                      <i class="bi bi-trash"></i>
+                    </a>
+                    <dialog id="deleteSector<%= sector[i].id %>" class="modal">
+                      <form method="dialog" class="modal-box">
+                        <p class="py-4">Are you want to delete?</p>
+                        <div class="grid grid-cols-2 gap-x-5">
+                          <a href="/admin/delete-sector/<%= sector[i].id %>" class="mt-5 text-white btn btn-accent">
+                            Delete
+                          </a>
+                          <button class="mt-5 text-white btn btn-primary">
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    </dialog>
+                  </th>
+                </tr>
+                <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include('partial/footer'); -%>

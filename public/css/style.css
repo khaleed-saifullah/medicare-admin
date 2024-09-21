@@ -1,0 +1,35 @@
+dialog.remove-backdrop::backdrop {
+  content: none !important;
+  display: none !important;
+}
+
+p.massage {
+  background: red;
+  align-self: flex-start;
+  padding: 5px 8px;
+  border-radius: 4px;
+  color: #fff;
+  margin: 0 auto;
+}
+
+.doctor-list-item {
+  display: inline-block;
+}
+.doctor-list-item::before {
+  content: ", ";
+}
+.doctor-list-item:first-child::before {
+  content: "";
+}
+
+.doctor-image {
+  height: 300px;
+  width: 300px;
+  object-fit: cover;
+}
+
+.hospital-image {
+  height: 300px;
+  width: 300px;
+  object-fit: cover;
+}

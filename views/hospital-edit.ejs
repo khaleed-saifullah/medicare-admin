@@ -1,0 +1,123 @@
+<%- include('partial/header'); -%>
+  <!-- Sidebar  -->
+  <div
+    class="z-[100] bg-base-100 xl:bg-transparent flex duration-150 flex-col items-center w-full translate-x-[-100%] xl:translate-x-0 absolute xl:relative min-h-screen py-5 xl:w-1/5 gap-y-10"
+    id="sidebar">
+    <div class="relative flex justify-center w-full">
+      <a href="/admin">
+        <img src="/img/logo.png" alt="" class="h-28 w-fit" />
+      </a>
+      <button class="absolute top-0 right-[5%] btn btn-outline btn-primary xl:hidden" onclick="sidebarToggle()">
+        <i class="text-xl bi bi-x"></i>
+      </button>
+    </div>
+
+    <div class="flex flex-col gap-y-4">
+      <a href="/admin/doctor-list" class="sidebar-link">
+        <i class="bi bi-clipboard-pulse"></i>
+        Doctors</a>
+      <a href="/admin/hospital-list" class="sidebar-link active-sidebar-link">
+        <i class="bi bi-hospital"></i>
+        Hospitals</a>
+      <a href="/admin/sector-list" class="sidebar-link">
+        <i class="bi bi-gear-wide-connected"></i>
+        Sectors</a>
+      <a href="/admin/log-out" class="mt-5 sidebar-link">
+        <i class="text-xl bi bi-box-arrow-right"></i>
+        Log Out</a>
+    </div>
+  </div>
+
+  <!-- Main body section -->
+  <div class="flex flex-col w-full px-5 py-5 overflow-y-auto xl:px-0 xl:w-4/5">
+    <div class="flex justify-between">
+      <h2 class="text-3xl font-bold text-black">Edit Hospital</h2>
+      <button class="btn btn-outline btn-accent xl:hidden" onclick="sidebarToggle()">
+        <i class="text-xl bi bi-list"></i>
+      </button>
+    </div>
+    <form action="/admin/edit-hospital/<%= hospital[0].hospital_id %> %>" method="POST" enctype="multipart/form-data">
+      <div class="gap-x-28 gap-y-10 mt-10 mb-5 xl:mb-0 bg-base-100 p-10">
+        <div class="flex flex-col gap-y-5">
+          <h3 class="text-2xl font-bold">Edit Hospital Info</h3>
+
+          <!--Hospital name input -->
+          <div class="flex flex-col form-control gap-y-1">
+            <label for="name" class="label">Hospital Name</label>
+            <input type="text" class="p-4 input input-bordered rounded-lg" placeholder="Name" name="name"
+              value="<%= hospital[0].hospital_name %>" required />
+          </div>
+
+
+          <!-- Location -->
+          <div class="flex flex-col form-control gap-y-1">
+            <label for="name" class="label">Location</label>
+            <div class="grid lg:grid-cols-3 gap-4">
+              <select class="select select-bordered" id="division<%= hospital[0].hospital_id %>" name="division_id"
+                onclick="changeDistrict(this.id)" required>
+                <option disabled selected>By Division</option>
+                <% for(let i=0; i <divisions.length; i++) { %>
+                  <option value="<%= divisions[i].id %>" <%=divisions[i].id==hospital[0].hospital_division_id
+                    ? "selected" :""%>>
+                    <%= divisions[i].division_name %>
+                  </option>
+                  <% } %>
+              </select>
+              <select class="select select-bordered" id="district<%= hospital[0].hospital_id %>"
+                onclick="changeThana(this.id)" name="district_id" required>
+                <% let district_id; for (let q=0;q<districts.length;q++) {
+                  if(districts[q].district_name==hospital[0].district_name){district_id=districts[q].id} } %>
+                  <option selected value="<%= district_id %>">
+                    <%= hospital[0].district_name %>
+                  </option>
+
+              </select>
+              <select class="select select-bordered" id="thana<%= hospital[0].hospital_id %>" name="thana_id" required>
+                <% let thana_id; for (let w=0;w<thanas.length;w++) {
+                  if(thanas[w].thana_name==hospital[0].thana_name){thana_id=thanas[w].id} } %>
+                  <option selected value="<%= thana_id %>">
+                    <%= hospital[0].thana_name %>
+                  </option>
+              </select>
+            </div>
+          </div>
+          <div class="flex flex-col form-control gap-y-1">
+            <label for="name" class="label">Hospital Address</label>
+            <input type="text" class="p-4 input input-bordered rounded-lg" placeholder="Hospital Address"
+              value="<%= hospital[0].hospital_address %>" name="address" />
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-5">
+            <!--Hospital contact no input -->
+            <div class="flex flex-col form-control gap-y-1">
+              <label for="name" class="label">Hospital contact no</label>
+              <input type="text" class="p-4 input input-bordered rounded-lg" placeholder="+880123456789" name="mobile"
+                value="<%= hospital[0].hostipal_mobile %>" />
+            </div>
+          </div>
+
+          <!-- Hospital specialty input -->
+          <div class="flex flex-col mt-3 form-control gap-y-3">
+            <label for="name" class="label">Speciality</label>
+            <div class="grid lg:grid-cols-3 gap-5">
+              <% for (let j=0; j <sector.length;j++){ %>
+                <% let checked; for (let w=0; w <hospital_sectors.length; w++){
+                  if(sector[j].id===hospital_sectors[w].sector_id){checked="checked" ; break}else{ checked="" } } %>
+                  <label class="flex items-center font-normal cursor-pointer gap-x-2">
+                    <input type="checkbox" class="checkbox checkbox-sm" value="<%=sector[j].id %>" name="sector"
+                      <%=checked %> />
+                    <span class="label-text">
+                      <%=sector[j].sector_name_bng %>
+                    </span>
+                  </label>
+                  <% } %>
+            </div>
+          </div>
+          <button class="btn btn-primary text-white mt-10" type="submit">
+            Submit
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <%- include('partial/footer'); -%>

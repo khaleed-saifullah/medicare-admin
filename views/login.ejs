@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/output.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <title>Medicare Admin</title>
+</head>
+
+<body class="min-h-screen bg-gray-100 border">
+  <div class="container flex items-center justify-center min-h-screen px-3 mx-auto">
+    <div class="flex flex-col items-center w-full p-5 py-10 rounded-lg sm:p-10 xl:p-5 xl:w-2/5 bg-base-100 gap-y-4">
+      <img src="/img/logo.png" class="w-40" alt="" />
+      <% if(loginMessage){ %>
+        <p class="massage w-full lg:w-3/4">
+          <%= loginMessage %>
+        </p>
+        <% } %>
+          <form action="/admin/login" method="POST" enctype="multipart/form-data" class="w-full lg:w-3/4">
+            <div class="flex flex-col mx-auto items-center self-center form-control gap-y-1">
+              <label for="name" class="self-start label">Phone Number</label>
+              <input type="text" class="w-full input input-bordered" name="phone_number" placeholder="Phone Number" />
+            </div>
+            <div class="flex flex-col mx-auto items-center self-center form-control gap-y-1">
+              <label for="name" class="self-start label">Password</label>
+              <input type="password" class="w-full input input-bordered" name="password" placeholder="Password" />
+            </div>
+            <div class="">
+              <button class="px-10 mt-10 text-white btn btn-primary">Login</button>
+            </div>
+          </form>
+    </div>
+  </div>
+  <script src="/js/jquery-3.6.1.min.js"></script>
+  <script src="/js/index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,117 @@
+<%- include('partial/header'); -%>
+  <!-- Sidebar  -->
+  <div
+    class="z-[100] bg-base-100 xl:bg-transparent flex duration-150 flex-col items-center w-full translate-x-[-100%] xl:translate-x-0 absolute xl:relative min-h-screen py-5 xl:w-1/5 gap-y-10"
+    id="sidebar">
+    <div class="relative flex justify-center w-full">
+      <a href="/admin">
+        <img src="/img/logo.png" alt="" class="h-28 w-fit" />
+      </a>
+      <button class="absolute top-0 right-[5%] btn btn-outline btn-primary xl:hidden" onclick="sidebarToggle()">
+        <i class="text-xl bi bi-x"></i>
+      </button>
+    </div>
+
+    <div class="flex flex-col gap-y-4">
+
+      <a href="/admin/doctor-list" class="sidebar-link">
+        <i class="bi bi-clipboard-pulse"></i>
+        Doctors</a>
+      <a href="/admin/hospital-list" class="sidebar-link active-sidebar-link">
+        <i class="bi bi-hospital"></i>
+        Hospitals</a>
+      <a href="/admin/sector-list" class="sidebar-link">
+        <i class="bi bi-gear-wide-connected"></i>
+        Sectors</a>
+      <a href="/admin/log-out" class="mt-5 sidebar-link">
+        <i class="text-xl bi bi-box-arrow-right"></i>
+        Log Out</a>
+    </div>
+  </div>
+
+  <!-- Main body section -->
+  <div class="flex flex-col w-full px-5 py-5 overflow-y-auto xl:px-0 xl:w-4/5">
+    <div class="flex justify-between">
+      <h2 class="text-3xl font-bold text-black">Hospitals</h2>
+      <button class="btn btn-outline btn-accent xl:hidden" onclick="sidebarToggle()">
+        <i class="text-xl bi bi-list"></i>
+      </button>
+    </div>
+    <div class="flex flex-col mt-10 mb-5 xl:mb-0 bg-base-100">
+      <!-- Table header  -->
+      <div class="flex flex-col justify-between p-3 gap-y-5 gap-x-5 md:flex-row">
+        <div class="flex w-full lg:max-w-[250px] xl:w-auto gap-x-10">
+          <a href="/admin/add-hospital" class="w-full text-white normal-case btn btn-primary">
+            Add hospital
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto bg-base-100 pe-3">
+      <!-- Table -->
+      <div class="xl:mt-5">
+        <table class="table bg-base-100">
+          <!-- head -->
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Division</th>
+              <th>District</th>
+              <th>Thana</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(let i=0; i <hospital.length; i++) { %>
+              <tr class="py-3">
+                <td>
+                  <div class="font-bold">
+                    <%= hospital[i].hospital_name %>
+                  </div>
+                </td>
+                <td>
+                  <%= hospital[i].division_name %>
+                </td>
+                <td>
+                  <%= hospital[i].district_name %>
+                </td>
+                <td>
+                  <%= hospital[i].thana_name %>
+                </td>
+                <td class="flex gap-x-3">
+
+                  <a class="btn btn-outline btn-sm" href="/admin/hospital-details/<%= hospital[i].hospital_id %>">
+                    <i class="bi bi-file-text"></i>
+                  </a>
+                  <a class="btn btn-outline btn-sm" href="/admin/edit-hospital/<%= hospital[i].hospital_id %>">
+                    <i class="bi bi-pencil"></i>
+                  </a>
+
+                  <a href="#" class="btn btn-outline btn-sm btn-error"
+                    onclick="deleteHospital<%= hospital[i].hospital_id %>.showModal()">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                  <dialog id="deleteHospital<%= hospital[i].hospital_id %>" class="modal">
+                    <form method="dialog" class="modal-box">
+                      <p class="py-4">Are you want to delete?</p>
+                      <div class="grid grid-cols-2 gap-x-5">
+                        <a href="/admin/delete-hospital/<%= hospital[i].hospital_id %>"
+                          class="mt-5 text-white btn btn-accent">
+                          Delete
+                        </a>
+                        <button class="mt-5 text-white btn btn-primary">
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  </dialog>
+                </td>
+              </tr>
+              <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <%- include('partial/footer'); -%>

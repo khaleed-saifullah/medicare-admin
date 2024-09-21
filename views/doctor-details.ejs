@@ -1,0 +1,112 @@
+<%- include('partial/header'); -%>
+  <!-- Sidebar  -->
+  <div
+    class="z-[100] bg-base-100 xl:bg-transparent flex duration-150 flex-col items-center w-full translate-x-[-100%] xl:translate-x-0 absolute xl:relative min-h-screen py-5 xl:w-1/5 gap-y-10"
+    id="sidebar">
+    <div class="relative flex justify-center w-full">
+      <a href="/admin">
+        <img src="/img/logo.png" alt="" class="h-28 w-fit" />
+      </a>
+      <button class="absolute top-0 right-[5%] btn btn-outline btn-primary xl:hidden" onclick="sidebarToggle()">
+        <i class="text-xl bi bi-x"></i>
+      </button>
+    </div>
+
+    <div class="flex flex-col gap-y-4">
+
+      <a href="/admin/doctor-list" class="sidebar-link active-sidebar-link">
+        <i class="bi bi-clipboard-pulse"></i>
+        Doctors</a>
+      <a href="/admin/hospital-list" class="sidebar-link">
+        <i class="bi bi-hospital"></i>
+        Hospitals</a>
+      <a href="/admin/sector-list" class="sidebar-link">
+        <i class="bi bi-gear-wide-connected"></i>
+        Sectors</a>
+      <a href="/admin/log-out" class="mt-5 sidebar-link">
+        <i class="text-xl bi bi-box-arrow-right"></i>
+        Log Out</a>
+    </div>
+  </div>
+
+  <!-- Main body section -->
+  <div class="flex flex-col w-full px-5 py-5 overflow-y-auto xl:px-0 xl:w-4/5">
+    <div class="flex justify-between">
+      <h2 class="text-3xl font-bold text-black">
+        Doctor Details
+      </h2>
+      <button class="btn btn-outline btn-accent xl:hidden" onclick="sidebarToggle()">
+        <i class="text-xl bi bi-list"></i>
+      </button>
+    </div>
+    <div class="flex flex-col mt-10 mb-5 xl:mb-0 bg-base-100 p-10">
+      <h3 class="text-2xl font-bold">
+        <%= doctor_info[0].doctor_name %>
+      </h3>
+
+      <!--Image inoput -->
+      <div class="flex flex-col form-control gap-y-1">
+        <label for="name" class="label">Image</label>
+
+        <img src="<%= doctor_info[0].doctor_image_url %>" class="mt-4 doctor-image" alt="" />
+      </div>
+
+      <!-- Degree -->
+      <div class="flex flex-col form-control gap-y-1">
+        <label for="name" class="label">Degree</label>
+        <p class="p-4 border rounded-lg">
+          <%= doctor_info[0].doctor_degree %>
+        </p>
+      </div>
+
+      <!-- Location -->
+      <div class="flex flex-col form-control gap-y-1">
+        <label for="name" class="label">Location</label>
+        <div class="grid lg:grid-cols-3 gap-4">
+          <p class="p-4 border rounded-lg">
+            <span class="font-bold">Division: </span>
+            <%= doctor_info[0].division_name %>
+          </p>
+          <p class="p-4 border rounded-lg">
+            <span class="font-bold">District: </span>
+            <%= doctor_info[0].district_name %>
+          </p>
+          <p class="p-4 border rounded-lg">
+            <span class="font-bold">Thana: </span>
+            <%= doctor_info[0].thana_name %>
+          </p>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="flex flex-col form-control gap-y-1">
+        <label for="name" class="label">Info</label>
+        <p class="p-4 border rounded-lg">
+          <%= doctor_info[0].doctor_info %>
+        </p>
+      </div>
+      <div class="grid lg:grid-cols-2 gap-5">
+
+        <!-- Category  -->
+        <div class="flex flex-col form-control gap-y-1">
+          <label for="name" class="label">Category</label>
+          <p class="p-4 border rounded-lg">
+            <%= doctor_info[0].sector_name_bng %>
+          </p>
+        </div>
+      </div>
+
+      <!-- Hospital and time -->
+      <div class="flex flex-col form-control gap-y-1">
+        <label for="name" class="label">Hospital & Time</label>
+        <div class="grid lg:grid-cols-2 gap-x-5 gap-y-4">
+          <% for (let k=0;k<doctor_time.length;k++) { %>
+            <p class="p-4 border rounded-lg">
+              <%= doctor_time[k].hospital_name %> : <%= doctor_time[k].time %> : <%= doctor_time[k].date %>
+            </p>
+            <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include('partial/footer'); -%>

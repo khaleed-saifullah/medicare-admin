@@ -1,0 +1,162 @@
+<%- include('partial/header'); -%>
+  <!-- Sidebar  -->
+  <div
+    class="z-[100] bg-base-100 xl:bg-transparent flex duration-150 flex-col items-center w-full translate-x-[-100%] xl:translate-x-0 absolute xl:relative min-h-screen py-5 xl:w-1/5 gap-y-10"
+    id="sidebar">
+    <div class="relative flex justify-center w-full">
+      <a href="/admin">
+        <img src="/img/logo.png" alt="" class="h-28 w-fit" />
+      </a>
+      <button class="absolute top-0 right-[5%] btn btn-outline btn-primary xl:hidden" onclick="sidebarToggle()">
+        <i class="text-xl bi bi-x"></i>
+      </button>
+    </div>
+
+    <div class="flex flex-col gap-y-4">
+      <a href="/admin/doctor-list" class="sidebar-link active-sidebar-link">
+        <i class="bi bi-clipboard-pulse"></i>
+        Doctors</a>
+      <a href="/admin/hospital-list" class="sidebar-link">
+        <i class="bi bi-hospital"></i>
+        Hospitals</a>
+      <a href="/admin/sector-list" class="sidebar-link">
+        <i class="bi bi-gear-wide-connected"></i>
+        Sectors</a>
+      <a href="/admin/log-out" class="mt-5 sidebar-link">
+        <i class="text-xl bi bi-box-arrow-right"></i>
+        Log Out</a>
+    </div>
+  </div>
+  <div class="flex flex-col w-full px-5 py-5 overflow-y-auto xl:px-0 xl:w-4/5">
+    <div class="flex justify-between">
+      <h2 class="text-3xl font-bold text-black">Edit Doctor</h2>
+      <button class="btn btn-outline btn-accent xl:hidden" onclick="sidebarToggle()">
+        <i class="text-xl bi bi-list"></i>
+      </button>
+    </div>
+    <form action="/admin/edit-doctor/<%= doctor_info[0].doctor_id %>" method="POST" enctype="multipart/form-data">
+      <div class="grid lg:grid-cols-2 gap-x-28 gap-y-10 mt-10 mb-5 xl:mb-0 bg-base-100 p-10">
+        <div class="flex flex-col gap-y-5">
+          <h3 class="text-2xl font-bold">Edit Doctor Info</h3>
+
+          <!-- Name input -->
+          <div class="flex flex-col form-control gap-y-1">
+            <label for="name" class="label">Name</label>
+            <input type="text" name="name" class="input input-bordered" placeholder="Name"
+              value="<%= doctor_info[0].doctor_name %>" />
+          </div>
+
+          <!--Image inoput -->
+          <div class="flex flex-col form-control gap-y-2">
+            <label for="name" class="label">Image</label>
+            <img src="<%= doctor_info[0].doctor_image_url %>" class="self-center w-64 mt-4 h-fit" alt=""
+              id="doctor-image" class="doctor-image" />
+            <input type="file" class="file-input file-input-bordered file-input-accent" id="doctor-image-input"
+              name="doctor_image" onchange="previewFileEdit(this.id)" />
+          </div>
+
+          <!-- Degree -->
+          <div class="flex flex-col form-control gap-y-1">
+            <label for="name" class="label">Degree</label>
+            <input type="text" name="degree" class="input input-bordered" placeholder="Degree"
+              value="<%= doctor_info[0].doctor_degree %>" />
+          </div>
+
+          <div class="flex flex-col form-control gap-y-1">
+            <label for="name" class="label">Designation</label>
+            <input type="text" name="designation" value="<%= doctor_info[0].doctor_designation %>"
+              class="input input-bordered" placeholder="Designation" />
+          </div>
+
+          <!-- Location -->
+          <div class="flex flex-col form-control gap-y-1">
+            <label for="name" class="label">Location</label>
+            <div class="grid grid-cols-3 gap-x-4">
+              <select class="select select-bordered" id="division<%= doctor_info[0].doctor_id %>" name="division_id"
+                onclick="changeDistrict(this.id)">
+                <option disabled selected>Select Division</option>
+                <% for(let i=0; i <divisions.length; i++) { %>
+                  <option value="<%= divisions[i].id %>" <%=divisions[i].id===doctor_info[0].doctor_division_id
+                    ? "selected" : "" %> >
+                    <%= divisions[i].division_name %>
+                  </option>
+                  <% } %>
+              </select>
+              <select class="select select-bordered" id="district<%= doctor_info[0].doctor_id %>" name="district_id"
+                onclick="changeThana(this.id)">
+                <% let district_id; for (let q=0;q<districts.length;q++) {
+                  if(districts[q].district_name==doctor_info[0].district_name){district_id=districts[q].id} } %>
+                  <option selected value="<%= district_id %>">
+                    <%= doctor_info[0].district_name %>
+                  </option>
+              </select>
+              <select class="select select-bordered" id="thana" name="thana_id">
+                <% let thana_id; for (let w=0;w<thanas.length;w++) {
+                  if(thanas[w].thana_name==doctor_info[0].thana_name){thana_id=thanas[w].id} } %>
+                  <option selected value="<%= thana_id %>">
+                    <%= doctor_info[0].thana_name %>
+                  </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Info -->
+          <div class="flex flex-col form-control gap-y-1">
+            <label for="name" class="label">Info</label>
+            <textarea class="textarea textarea-bordered" placeholder="Bio" name="info"
+              value=""><%= doctor_info[0].doctor_info %></textarea>
+          </div>
+
+          <!-- Category -->
+          <div class="flex flex-col form-control gap-y-1">
+            <label for="name" class="label">Category</label>
+            <select class="select select-bordered" name="sector" required>
+              <option disabled selected>Select Category</option>
+              <% for(let j=0;j<sector.length;j++){ %>
+                <option value="<%= sector[j].id %>" <%=sector[j].id===doctor_info[0].doctor_sector_id ? "selected" : ""
+                  %> %> >
+                  <%= sector[j].sector_name_bng %>
+                </option>
+                <% } %>
+            </select>
+          </div>
+
+          <button class="btn btn-primary text-white mt-10" type="submit">
+            Submit
+          </button>
+        </div>
+        <div class="flex flex-col gap-y-5">
+
+          <h3 class="text-2xl font-bold">Edit Doctor Extra Info</h3>
+
+          <div class="flex flex-col mt-5 form-control">
+            <label for="name" class="label">Hospital & Time</label>
+            <% for(let w=0;w<hospital_list.length;w++) { %>
+              <% let checked; for (let q=0; q <doctor_time.length; q++){
+                if(hospital_list[w].hospital_id===doctor_time[q].hostipal_id){checked="checked" ; break}else{ checked=""
+                } } %>
+                <label class="cursor-pointer label flex flex-col mb-3">
+                  <span class="label-text mb-3">
+                    <%= hospital_list[w].hospital_name %>
+                  </span>
+                  <div class="flex items-center gap-x-5">
+                    <input type="checkbox" class="checkbox hospital-input" name="hospital_id"
+                      value="<%= hospital_list[w].hospital_id %>" <%=checked %> />
+                    <input type="text" class="input input-bordered" name="time" <%=checked ? "" : "disabled" %>
+                    <% let timeValue; for (let q=0; q <doctor_time.length; q++){
+                      if(hospital_list[w].hospital_id===doctor_time[q].hostipal_id){timeValue=doctor_time[q].time ;
+                      break}else{ timeValue="" } } %> value="<%= timeValue %>"/>
+                        <input type="text" class="input input-bordered" name="date" <%=checked ? "" : "disabled" %>
+                        <% let dateValue; for (let e=0; e <doctor_time.length; e++){
+                          if(hospital_list[w].hospital_id===doctor_time[e].hostipal_id){dateValue=doctor_time[e].date ;
+                          break}else{ dateValue="" } } %> value="<%= dateValue %>" />
+                  </div>
+                </label>
+                <% } %>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </div>
+  <%- include('partial/footer'); -%>
